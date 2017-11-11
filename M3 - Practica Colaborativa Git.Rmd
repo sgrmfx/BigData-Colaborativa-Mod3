@@ -1,0 +1,80 @@
+---
+title: "M3 Practica Colaborativa"
+author: "Sergio Gracia Mu?oz"
+date: "10 de noviembre de 2017"
+output: github_document:
+        html_preview: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#Cargamos directorio a trabajar
+setwd("C:/Users/Sergio/datos")
+
+#Comprobamos la ubicaci?n
+getwd()
+"C:/Users/Sergio/datos"
+
+#Creamos directorio para trabajar con los datos
+if(!file.exists("../datos")) {dir.create("../datos")}
+
+#Comprobamos que tenemos el archive en dicho directorio
+list.files("../datos")
+"Councyl.csv"    
+   
+#Cargamos libreria knitr
+library(knitr)
+library("knitr", lib.loc="~/R/win-library/3.4")
+
+#Leemos los campos de la tabla
+CouncilEnergy <- read.table("../datos/Councyl.csv", row.names=NULL, sep=";", header=TRUE)
+
+#Listamos los datos
+library (reshape)
+CouncilEnergy <-read.csv("../datos/Councyl.csv", header=TRUE)
+head(CouncilEnergy)
+
+#listamos la tabla
+View(CouncilEnergy)
+
+#Comprobamos todas columnas en mayusculas y min?sculas, y transformamos en min?sculas
+names(CouncilEnergy)
+names(CouncilEnergy) <- tolower(names(CouncilEnergy))
+
+#Ordenamos por lugar
+lugar <- CouncilEnergy$site.name
+lugar[1:12]
+lugar <- sort(lugar, decreasing=TRUE)
+CouncilEnergy2 <- CouncilEnergy[order(xtfrm(CouncilEnergy[,6]), xtfrm(CouncilEnergy[,11]), xtfrm(CouncilEnergy[,12])), ]
+
+#Quitamos los puntos de los titulos de las columnas para una major comprensi?n y posibles fallos en la codificaci?n"
+colnames(CouncilEnergy) <- c("extractdate","organisationuri","organisationlevel","servicetypeuri","servicetypelabel","sitename","electconskwh","electco2tonnes","gasconskwh","gasco2tonnes","totalco2tonnes","totalkwh")
+names(CouncilEnergy)
+
+#No realizamos ninguna ordenaci?n ya que se observa que los datos est?n ordenados por el campo "site.name" (a partir de ahora "sitename")
+
+#Guardamos fichero resultante de la limpieza
+write.csv2(CouncilEnergy,file = "../datos/CouncylLimpio.csv.csv")
+
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
